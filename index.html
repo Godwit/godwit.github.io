@@ -151,6 +151,106 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-MongoDB两表联合查询" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/18/MongoDB%E4%B8%A4%E8%A1%A8%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2/">MongoDB两表联合查询</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/18/MongoDB%E4%B8%A4%E8%A1%A8%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2/" class="archive-article-date">
+  	<time datetime="2020-08-18T13:32:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>MongoDB里面有两个Collection，一个是cutting_tool_template(刀具模板)，一个是cutting_tool(刀具)，每把刀具隶属于一个模板，因此一个模板拥有多把刀具。现在页面需要展示该刀具模板有多少把刀具。</p>
+<p>有很多种实现方法：<br>第一：把刀具集合作为模板的一个列表；</p>
+<p>第二：模板增加一个变量（tool_count），增加一把刀具则+1，删除一把刀具则-1;</p>
+<p>第三：每次查询模板数据的时候，联合查询刀具表，进行一个mysql里面的count操作。</p>
+<p>这里采用了第三种方法。通过cutting_tool.template._id与cutting_tool.template_id进行关联。</p>
+<p>MongoDB通过lookup函数来实现两个collection的联合查询。描述如下：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * from: The target collection. 目标集合，即本案例中的[刀具]表</span><br><span class="line"> * localField: The local join field. 本地联合变量：即本案例中的[模板表]的ID</span><br><span class="line"> * foreignField: The target join field. 目标联合变量，即本案例中的[刀具表]的模板ID</span><br><span class="line"> * as: The name for the results. 联合查询后结果的名称</span><br><span class="line"> *&#x2F;</span><br><span class="line">&#123;</span><br><span class="line">  from: &#39;cutting_tool&#39;,</span><br><span class="line">  localField: &#39;_id&#39;,</span><br><span class="line">  foreignField: &#39;template_id&#39;,</span><br><span class="line">  as: &#39;tool_array&#39;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>参考代码一：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testAggregation</span><span class="params">( )</span> </span>&#123;</span><br><span class="line">        Query query = <span class="keyword">new</span> Query();</span><br><span class="line">        <span class="comment">// 根据刀体类型确定查找的是那种类型的刀具模板，例如铣刀，钻头等刀具类型。</span></span><br><span class="line">        <span class="comment">// 这里可以直接用Criteria，会更简洁。但是因为，函数接口是传入query，所以这里用了query做match</span></span><br><span class="line">        query.addCriteria(Criteria.where(<span class="string">&quot;type_of_tool_body&quot;</span>).is( <span class="string">&quot;Centerdrill&quot;</span> ));</span><br><span class="line">        AggregationOperation match = (value) -&gt; <span class="keyword">new</span> Document(<span class="string">&quot;$match&quot;</span>, query.getQueryObject() );</span><br><span class="line">        AggregationOperation addFields = (AggregationOperationContext aggregationOperationContext) -&gt; &#123;</span><br><span class="line">            DBObject dbObject =</span><br><span class="line">                    <span class="keyword">new</span> BasicDBObject(<span class="string">&quot;tool_count&quot;</span>,</span><br><span class="line">                            <span class="keyword">new</span> BasicDBObject(<span class="string">&quot;$size&quot;</span>, <span class="string">&quot;$tool_array&quot;</span>));</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Document( <span class="keyword">new</span> BasicDBObject(<span class="string">&quot;$addFields&quot;</span>, dbObject) );</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">long</span> skipNum = <span class="number">0L</span>;</span><br><span class="line">        <span class="keyword">int</span> limitNum = <span class="number">3</span>;</span><br><span class="line">        Aggregation aggregation = Aggregation.newAggregation(</span><br><span class="line">                match,    <span class="comment">// 查找特定类型的刀具模板</span></span><br><span class="line">                Aggregation.skip( skipNum ),</span><br><span class="line">                Aggregation.limit( limitNum ),</span><br><span class="line">                <span class="comment">/** 两表联合查询，得到的数据大致是：[&#123;刀具模板一自身数据，tool_array:[属于刀具模板一的所有刀具]&#125;, 刀具模板二...] **/</span></span><br><span class="line">                Aggregation.lookup(<span class="string">&quot;cutting_tool&quot;</span>, <span class="string">&quot;_id&quot;</span>, <span class="string">&quot;template_id&quot;</span>, <span class="string">&quot;tool_array&quot;</span>),    </span><br><span class="line">                <span class="comment">/** 针对得到的数据结果进行处理，增加新的变量:tool_count，此时集合为：[&#123;刀具模板一自身数据，tool_array:[属于刀具模板一的所有刀具], tool_count: 值为tool_array的size&#125;, 刀具模板二...] **/</span> </span><br><span class="line">                addFields</span><br><span class="line">        );</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/** 执行聚合查询，因为返回的结果是刀具模板（CuttingToolTemplate），所以，中间变量tool_array不用处理了**/</span></span><br><span class="line">        AggregationResults&lt;CuttingToolTemplate&gt; cutting_tool_template1 = mongoTemplate.aggregate(aggregation,</span><br><span class="line">                <span class="string">&quot;cutting_tool_template&quot;</span>, CuttingToolTemplate.class);</span><br><span class="line">        <span class="keyword">for</span> ( CuttingToolTemplate ctt : cutting_tool_template1.getMappedResults() ) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;CTT-----------&quot;</span> + ctt );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>参考代码二：</strong>实现功能与上述代码一致，只是用另外一种写法来实现。</p>
+<p>这种写法更简单，配合<strong>MongoDB Compass</strong>食用（自动生成Java版的Aggregation代码），更加方便。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDoc2Bson</span><span class="params">( )</span> </span>&#123;</span><br><span class="line">        Query query = <span class="keyword">new</span> Query();</span><br><span class="line">        query.addCriteria(Criteria.where(<span class="string">&quot;type_of_tool_body&quot;</span>).is( <span class="string">&quot;Centerdrill&quot;</span> ));</span><br><span class="line">        Document queryDoc = query.getQueryObject();</span><br><span class="line">        <span class="keyword">int</span> skipNum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> limitNum = <span class="number">3</span>;</span><br><span class="line">        List&lt;Bson&gt; bsons = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        bsons.add( match(queryDoc) );</span><br><span class="line">        bsons.add( skip(skipNum) );</span><br><span class="line">        bsons.add( limit(limitNum) );</span><br><span class="line">        bsons.add( lookup(<span class="string">&quot;cutting_tool&quot;</span>, <span class="string">&quot;_id&quot;</span>, <span class="string">&quot;template_id&quot;</span>, <span class="string">&quot;tool_array&quot;</span>) );</span><br><span class="line">        bsons.add( addFields(<span class="keyword">new</span> Field(<span class="string">&quot;tool_count&quot;</span>, <span class="keyword">new</span> Document(<span class="string">&quot;$size&quot;</span>, <span class="string">&quot;$tool_array&quot;</span>))) );</span><br><span class="line">        <span class="comment">/** 因为这里解析获得的是Document，所以把中间变量tool_array排除掉。**/</span></span><br><span class="line">        bsons.add( project(exclude(<span class="string">&quot;tool_array&quot;</span>)) );</span><br><span class="line"></span><br><span class="line">        MongoCollection&lt;Document&gt; cutting_tool_template = mongoTemplate.getCollection(<span class="string">&quot;cutting_tool_template&quot;</span>);</span><br><span class="line">        AggregateIterable&lt;Document&gt; aggregate = cutting_tool_template.aggregate(bsons);</span><br><span class="line">        <span class="keyword">for</span>( Document doc : aggregate )&#123;</span><br><span class="line">            <span class="comment">/** 将Document解析为CuttingToolTemplate对象 **/</span></span><br><span class="line">            CuttingToolTemplate o = mongoTemplate.getConverter().read( CuttingToolTemplate.class, doc);</span><br><span class="line">            System.out.println(<span class="string">&quot;CTT: &quot;</span> + o);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>简单做下备案，希望对你有用。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MongoDB</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/数据库//" class="article-tag-list-link color4">数据库</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/18/MongoDB%E4%B8%A4%E8%A1%A8%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-hugo-step-by-step" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -456,6 +556,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">MongoDB</a>
+              </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hugo</a>
