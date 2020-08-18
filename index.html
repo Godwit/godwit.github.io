@@ -151,6 +151,149 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-hugo-step-by-step" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/18/hugo-step-by-step/">hugo-step-by-step</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/18/hugo-step-by-step/" class="archive-article-date">
+  	<time datetime="2020-08-18T13:07:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-安装Hugo"><a href="#1-安装Hugo" class="headerlink" title="1. 安装Hugo"></a>1. 安装Hugo</h2><p>安装环境：Win10</p>
+<h3 id="1-1-建立文件夹"><a href="#1-1-建立文件夹" class="headerlink" title="1.1 建立文件夹"></a>1.1 建立文件夹</h3><ol>
+<li>建立文件夹D:\Hugo</li>
+<li>建立子文件夹：D:\Hugo\bin，D:\Hugo\Sites</li>
+</ol>
+<h3 id="1-2-下载二进制安装文件"><a href="#1-2-下载二进制安装文件" class="headerlink" title="1.2 下载二进制安装文件"></a>1.2 下载二进制安装文件</h3><ol>
+<li><p>进入页面：<a target="_blank" rel="noopener" href="https://github.com/gohugoio/hugo/releases">https://github.com/gohugoio/hugo/releases</a></p>
+</li>
+<li><p>选择对应版本，目前最新版本：<a target="_blank" rel="noopener" href="https://github.com/gohugoio/hugo/releases/download/v0.71.0/hugo_0.71.0_Windows-64bit.zip">hugo_0.71.0_Windows-64bit.zip</a></p>
+</li>
+<li><p>解压后放到D:\Hugo\bin目录下，如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">D:.</span><br><span class="line">├─bin</span><br><span class="line">│      hugo.exe</span><br><span class="line">│      LICENSE</span><br><span class="line">│      README.md</span><br><span class="line">│</span><br><span class="line">└─Sites</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="4">
+<li><p>将D:\Hugo\bin添加到环境变量</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">rem 如果下面步骤有问题，需要手动重启cmd，或者直接手动添加</span></span><br><span class="line"><span class="built_in">set</span> <span class="built_in">PATH</span>=<span class="variable">%PATH%</span>;D:\Hugo\bin</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>验证安装</p>
+<blockquote>
+<p>D:\Hugo\Sites&gt;hugo version<br>Hugo Static Site Generator v0.71.0-06150C87 windows/amd64 BuildDate: 2020-05-18T16:08:31Z</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="2-创建站点"><a href="#2-创建站点" class="headerlink" title="2. 创建站点"></a>2. 创建站点</h2><h3 id="2-1-创建一个新的站点"><a href="#2-1-创建一个新的站点" class="headerlink" title="2.1 创建一个新的站点"></a>2.1 创建一个新的站点</h3><blockquote>
+<p>hugo new site godwit.cn</p>
+</blockquote>
+<h3 id="2-2-添加一个主题"><a href="#2-2-添加一个主题" class="headerlink" title="2.2 添加一个主题"></a>2.2 添加一个主题</h3><ol>
+<li>进入网站<a target="_blank" rel="noopener" href="https://themes.gohugo.io/">https://themes.gohugo.io/</a></li>
+<li>选择一个自己喜欢的主题，例如：<a target="_blank" rel="noopener" href="https://themes.gohugo.io/mainroad/">https://themes.gohugo.io/mainroad/</a></li>
+<li>安装主题</li>
+</ol>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> godwit.cn/themes</span><br><span class="line">git clone https://github.com/vimux/mainroad</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>配置主题，修改godwit.cn/config.toml文件, 添加主题(其实这里顺便可以把其他配置顺手修改掉)：</li>
+</ol>
+<blockquote>
+<p>theme = “mainroad”</p>
+</blockquote>
+<p>​    修改Config.toml</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">baseURL</span> = <span class="string">&quot;https://godwit.cn/&quot;</span></span><br><span class="line"><span class="comment"># baseurl = &quot;/&quot;</span></span><br><span class="line"><span class="attr">languageCode</span> = <span class="string">&quot;zh-CN&quot;</span></span><br><span class="line"><span class="attr">paginate</span> = <span class="string">&quot;10&quot;</span> <span class="comment"># Number of posts per page</span></span><br><span class="line"><span class="attr">theme</span> = <span class="string">&quot;mainroad&quot;</span></span><br><span class="line"><span class="attr">disqusShortname</span> = <span class="string">&quot;&quot;</span> <span class="comment"># Enable Disqus comments by entering your Disqus shortname</span></span><br><span class="line"><span class="attr">googleAnalytics</span> = <span class="string">&quot;&quot;</span> <span class="comment"># Enable Google Analytics by entering your tracking id</span></span><br><span class="line"></span><br><span class="line"><span class="section">[Author]</span> <span class="comment"># Used in authorbox</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;Godwit&quot;</span></span><br><span class="line">  <span class="attr">bio</span> = <span class="string">&quot;Old Dog.&quot;</span></span><br><span class="line">  <span class="attr">avatar</span> = <span class="string">&quot;img/avatar.png&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[Params]</span></span><br><span class="line">  <span class="attr">subtitle</span> = <span class="string">&quot;&quot;</span> <span class="comment"># Deprecated in favor of .Site.Params.logo.subtitle</span></span><br><span class="line">  <span class="attr">description</span> = <span class="string">&quot;Godwit&#x27;s Personal blog about everything&quot;</span> <span class="comment"># Site description. Used in meta description</span></span><br><span class="line">  <span class="attr">copyright</span> = <span class="string">&quot;Godwit&quot;</span> <span class="comment"># Footer copyright holder, otherwise will use site title</span></span><br><span class="line">  <span class="attr">opengraph</span> = <span class="literal">true</span> <span class="comment"># Enable OpenGraph if true</span></span><br><span class="line">  <span class="attr">schema</span> = <span class="literal">true</span> <span class="comment"># Enable Schema</span></span><br><span class="line">  <span class="attr">twitter_cards</span> = <span class="literal">true</span> <span class="comment"># Enable Twitter Cards if true</span></span><br><span class="line">  <span class="attr">readmore</span> = <span class="literal">true</span> <span class="comment"># Show &quot;Read more&quot; button in list if true</span></span><br><span class="line">  <span class="attr">authorbox</span> = <span class="literal">true</span> <span class="comment"># Show authorbox at bottom of pages if true</span></span><br><span class="line">  <span class="attr">toc</span> = <span class="literal">true</span> <span class="comment"># Enable Table of Contents</span></span><br><span class="line">  <span class="attr">pager</span> = <span class="literal">true</span> <span class="comment"># Show pager navigation (prev/next links) at the bottom of pages if true</span></span><br><span class="line">  <span class="attr">post_meta</span> = [<span class="string">&quot;date&quot;</span>, <span class="string">&quot;categories&quot;</span>, <span class="string">&quot;translations&quot;</span>] <span class="comment"># Order of post meta information</span></span><br><span class="line">  <span class="attr">mainSections</span> = [<span class="string">&quot;post&quot;</span>, <span class="string">&quot;blog&quot;</span>, <span class="string">&quot;news&quot;</span>, <span class="string">&quot;tools&quot;</span>] <span class="comment"># Specify section pages to show on home page and the &quot;Recent articles&quot; widget</span></span><br><span class="line">  <span class="attr">dateformat</span> = <span class="string">&quot;2006-01-02&quot;</span> <span class="comment"># Change the format of dates</span></span><br><span class="line">  <span class="attr">mathjax</span> = <span class="literal">true</span> <span class="comment"># Enable MathJax</span></span><br><span class="line">  <span class="attr">mathjaxPath</span> = <span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js&quot;</span> <span class="comment"># Specify MathJax path</span></span><br><span class="line">  <span class="attr">mathjaxConfig</span> = <span class="string">&quot;TeX-AMS-MML_HTMLorMML&quot;</span> <span class="comment"># Specify MathJax config</span></span><br><span class="line">  <span class="attr">highlightColor</span> = <span class="string">&quot;#e22d30&quot;</span> <span class="comment"># Override highlight color</span></span><br><span class="line">  <span class="attr">customCSS</span> = [<span class="string">&quot;css/custom.css&quot;</span>] <span class="comment"># Include custom CSS files</span></span><br><span class="line">  <span class="attr">customJS</span> = [<span class="string">&quot;js/custom.js&quot;</span>] <span class="comment"># Include custom JS files</span></span><br><span class="line"></span><br><span class="line"><span class="section">[Params.logo]</span></span><br><span class="line">  <span class="attr">title</span> = <span class="string">&quot;Godwit&quot;</span> <span class="comment"># Logo title, otherwise will use site title</span></span><br><span class="line">  <span class="attr">subtitle</span> = <span class="string">&quot;老狗窝&quot;</span> <span class="comment"># Logo subtitle</span></span><br><span class="line"></span><br><span class="line"><span class="section">[Params.sidebar]</span></span><br><span class="line">  <span class="attr">home</span> = <span class="string">&quot;right&quot;</span> <span class="comment"># Configure layout for home page</span></span><br><span class="line">  <span class="attr">list</span> = <span class="string">&quot;left&quot;</span>  <span class="comment"># Configure layout for list pages</span></span><br><span class="line">  <span class="attr">single</span> = <span class="literal">false</span> <span class="comment"># Configure layout for single pages</span></span><br><span class="line">  <span class="comment"># Enable widgets in given order</span></span><br><span class="line">  <span class="attr">widgets</span> = [<span class="string">&quot;search&quot;</span>, <span class="string">&quot;recent&quot;</span>, <span class="string">&quot;categories&quot;</span>, <span class="string">&quot;taglist&quot;</span>, <span class="string">&quot;social&quot;</span>, <span class="string">&quot;languages&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="section">[Params.widgets]</span></span><br><span class="line">  <span class="attr">recent_num</span> = <span class="number">5</span> <span class="comment"># Set the number of articles in the &quot;Recent articles&quot; widget</span></span><br><span class="line">  <span class="attr">tags_counter</span> = <span class="literal">false</span> <span class="comment"># Enable counter for each tag in &quot;Tags&quot; widget</span></span><br><span class="line"></span><br><span class="line"><span class="section">[Params.widgets.social]</span></span><br><span class="line">  <span class="comment"># Enable parts of social widget</span></span><br><span class="line">  <span class="comment"># facebook = &quot;username&quot;</span></span><br><span class="line">  <span class="comment"># twitter = &quot;username&quot;</span></span><br><span class="line">  <span class="comment"># instagram = &quot;username&quot;</span></span><br><span class="line">  <span class="comment"># linkedin = &quot;username&quot;</span></span><br><span class="line">  <span class="comment"># telegram = &quot;username&quot;</span></span><br><span class="line">  <span class="comment"># github = &quot;username&quot;</span></span><br><span class="line">  <span class="comment"># gitlab = &quot;username&quot;</span></span><br><span class="line">  <span class="comment"># bitbucket = &quot;username&quot;</span></span><br><span class="line">  <span class="attr">email</span> = <span class="string">&quot;godwitnow@foxmail.com&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Custom social links</span></span><br><span class="line"><span class="comment">#[[Params.widgets.social.custom]]</span></span><br><span class="line"><span class="comment">#  title = &quot;Youtube&quot;</span></span><br><span class="line"><span class="comment">#  url = &quot;https://youtube.com/user/username&quot;</span></span><br><span class="line"><span class="comment">#  icon = &quot;youtube.svg&quot; # Optional. Path relative to &quot;layouts/partials&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#[[Params.widgets.social.custom]]</span></span><br><span class="line"><span class="comment">#  title = &quot;GODWiT&quot;</span></span><br><span class="line"><span class="comment">#  url = &quot;http://godwit.cn&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="2-3-添加一篇文章"><a href="#2-3-添加一篇文章" class="headerlink" title="2.3 添加一篇文章"></a>2.3 添加一篇文章</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">D:\<span class="title">Hugo</span>\<span class="title">Sites</span>\<span class="title">godwit.cn</span>&gt;<span class="title">hugo</span> <span class="title">new</span> <span class="title">tools</span>/<span class="title">hugo</span>-<span class="title">step</span>-<span class="title">by</span>-<span class="title">step.md</span></span></span><br><span class="line"><span class="function"><span class="title">D</span>:\<span class="title">Hugo</span>\<span class="title">Sites</span>\<span class="title">godwit.cn</span>\<span class="title">content</span>\<span class="title">tools</span>\<span class="title">hugo</span>-<span class="title">step</span>-<span class="title">by</span>-<span class="title">step.md</span> <span class="title">created</span></span></span><br></pre></td></tr></table></figure>
+
+<p>然后把本篇文章的内容copy进上面创建的hugo-step-by-step.md文件里面（套娃）。</p>
+<p>注意，要在文章最前面添加如下Front Matter Example(Hugo会根据下面配置决定如何显示页面)：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Common-Defined params</span></span><br><span class="line">title: &quot;Hugo Step By Step&quot;</span><br><span class="line">date: &quot;2020-05-05&quot;</span><br><span class="line">description: &quot;如何用Hugo一步一步搭建自己的Blog&quot;</span><br><span class="line">categories:</span><br><span class="line">  - &quot;工善利器&quot;</span><br><span class="line">tags:</span><br><span class="line">  - &quot;Hugo&quot;</span><br><span class="line">menu: side # Optional, add page to a menu. Options: main, side, footer</span><br><span class="line"></span><br><span class="line"><span class="comment"># Theme-Defined params</span></span><br><span class="line"><span class="comment"># thumbnail: &quot;img/placeholder.jpg&quot; # Thumbnail image</span></span><br><span class="line">lead: &quot;用Hugo搭建自己的老狗窝&quot; # Lead text</span><br><span class="line">comments: true # Enable Disqus comments for specific page</span><br><span class="line">authorbox: true # Enable authorbox for specific page</span><br><span class="line">pager: true # Enable pager navigation (prev/next) for specific page</span><br><span class="line">toc: true # Enable Table of Contents for specific page</span><br><span class="line">mathjax: true # Enable MathJax for specific page</span><br><span class="line">sidebar: &quot;right&quot; # Enable sidebar (on the right side) per page</span><br><span class="line">widgets: # Enable sidebar widgets in given order per page</span><br><span class="line">  - &quot;search&quot;</span><br><span class="line">  - &quot;recent&quot;</span><br><span class="line">  - &quot;taglist&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-本地启动站点"><a href="#3-本地启动站点" class="headerlink" title="3. 本地启动站点"></a>3. 本地启动站点</h2><h3 id="3-1-启动站点"><a href="#3-1-启动站点" class="headerlink" title="3.1 启动站点"></a>3.1 启动站点</h3><blockquote>
+<p>hugo server -D</p>
+</blockquote>
+<p>访问**<a target="_blank" rel="noopener" href="http://localhost:1313/.**%E5%8D%B3%E5%8F%AF%E7%9C%8B%E5%88%B0%E7%BD%91%E7%AB%99">http://localhost:1313/.**即可看到网站</a></p>
+<h2 id="4-Build静态网页"><a href="#4-Build静态网页" class="headerlink" title="4. Build静态网页"></a>4. Build静态网页</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">D:\<span class="title">Hugo</span>\<span class="title">Sites</span>\<span class="title">godwit.cn</span>&gt;<span class="title">hugo</span> -<span class="title">D</span></span></span><br><span class="line"><span class="function"><span class="title">Building</span> <span class="title">sites</span> …</span></span><br><span class="line"><span class="function">                   | <span class="title">EN</span></span></span><br><span class="line"><span class="function">-------------------+-----</span></span><br><span class="line"><span class="function">  <span class="title">Pages</span>            | 10</span></span><br><span class="line"><span class="function">  <span class="title">Paginator</span> <span class="title">pages</span>  |  0</span></span><br><span class="line"><span class="function">  <span class="title">Non</span>-<span class="title">page</span> <span class="title">files</span>   |  0</span></span><br><span class="line"><span class="function">  <span class="title">Static</span> <span class="title">files</span>     |  1</span></span><br><span class="line"><span class="function">  <span class="title">Processed</span> <span class="title">images</span> |  0</span></span><br><span class="line"><span class="function">  <span class="title">Aliases</span>          |  4</span></span><br><span class="line"><span class="function">  <span class="title">Sitemaps</span>         |  1</span></span><br><span class="line"><span class="function">  <span class="title">Cleaned</span>          |  0</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">Total</span> <span class="title">in</span> 123 <span class="title">ms</span></span></span><br></pre></td></tr></table></figure>
+
+<p>这样，就会把所有文件Build到public目录下</p>
+<h2 id="5-发布到github"><a href="#5-发布到github" class="headerlink" title="5. 发布到github"></a>5. 发布到github</h2><p>在public目录下：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;Initialize the website&quot;</span><br><span class="line"><span class="comment">rem 注意在github上创建Repository的时候，格式是：用户名.github.io 不可用其他的</span></span><br><span class="line">git remote add origin https://github.com/Godwit/godwit.github.io</span><br><span class="line">git push -u origin master</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="6-添加解析"><a href="#6-添加解析" class="headerlink" title="6. 添加解析"></a>6. 添加解析</h2><p>在阿里云后台设置自己域名的解析，将www的值映射为godwit.github.io。</p>
+<p>这样就可以在浏览器访问了。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hugo</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/18/hugo-step-by-step/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -317,6 +460,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hugo</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
